@@ -1,0 +1,115 @@
+{
+    "name": "globalshare-blockchain-api",
+    "version": "0.1.0",
+    "description": "Node JS Blockchain API",
+    "author": "Will Olivera <wolivera@zircon.tech>",
+    "main": "index.js",
+    "engines": {
+        "node": ">=8.10.0",
+        "npm": ">=5.6.0",
+        "yarn": ">=1.5.1"
+    },
+    "scripts": {
+        "start": "gulp serve",
+        "build": "gulp",
+        "copy": "gulp copy",
+        "babel": "gulp babel",
+        "lint": "esw *.js server config --color",
+        "lint:watch": "yarn lint -- --watch",
+        "beautify": "es-beautifier -u -c .eslintrc.js *.js server config",
+        "precommit": "yarn lint && yarn test",
+        "test": "cross-env NODE_ENV=test ./node_modules/.bin/jest server/tests",
+        "test:watch": "jest --watch",
+        "test:coverage": "cross-env NODE_ENV=test ./node_modules/.bin/istanbul cover _jest -- --ui bdd --reporter spec --colors --compilers js:babel-core/register server/tests --recursive",
+        "test:check-coverage": "yarn test:coverage && istanbul check-coverage",
+        "report-coverage": "coveralls < ./coverage/lcov.info",
+        "sequelize": "NODE_ENV=development ./node_modules/.bin/babel-node ./node_modules/.bin/sequelize",
+        "db:migrate": "npm run sequelize db:migrate"
+    },
+    "jest": {
+        "automock": false,
+        "bail": false,
+        "verbose": false,
+        "setupFiles": [],
+        "testMatch": [
+            "**/Tests/**/*.js",
+            "**/?(*.)(spec|test|integration).js?(x)"
+        ],
+        "testPathIgnorePatterns": [
+            "/node_modules/",
+            "/coverage/",
+            "/dist/"
+        ],
+        "testEnvironment": "node"
+    },
+    "dependencies": {
+        "babel-core": "6.24.0",
+        "babel-plugin-transform-runtime": "^6.23.0",
+        "babel-register": "^6.26.0",
+        "babel-runtime": "^6.26.0",
+        "body-parser": "1.15.2",
+        "compression": "1.6.2",
+        "cookie-parser": "1.4.3",
+        "cors": "2.8.1",
+        "debug": "^2.4.5",
+        "del": "^2.2.0",
+        "dotenv-safe": "^4.0.3",
+        "express": "4.14.0",
+        "express-jwt": "5.1.0",
+        "express-validation": "1.0.1",
+        "express-winston": "2.1.2",
+        "gulp": "3.9.0",
+        "gulp-load-plugins": "^1.2.0",
+        "helmet": "3.1.0",
+        "http-status": "^0.2.0",
+        "joi": "10.0.6",
+        "jsonwebtoken": "7.1.9",
+        "lodash": "4.17.10",
+        "method-override": "^2.3.5",
+        "morgan": "1.7.0",
+        "mysql": "^2.13.0",
+        "mysql2": "^1.6.1",
+        "run-sequence": "^1.1.5",
+        "sequelize": "4.38.0",
+        "sequelize-cli": "^5.2.0",
+        "supertest": "2.0.1",
+        "supertest-as-promised": "4.0.2",
+        "winston": "2.3.0"
+    },
+    "devDependencies": {
+        "babel-cli": "6.24.0",
+        "babel-plugin-add-module-exports": "0.2.1",
+        "babel-plugin-transform-object-rest-spread": "6.26.0",
+        "babel-preset-es2015": "6.24.1",
+        "babel-preset-stage-2": "6.18.0",
+        "commitizen": "^2.9.2",
+        "coveralls": "^2.11.6",
+        "cross-env": "3.1.3",
+        "eslint": "3.16.1",
+        "eslint-config-airbnb-base": "7.1.0",
+        "eslint-plugin-import": "1.16.0",
+        "eslint-watch": "2.1.14",
+        "gulp-babel": "6.1.2",
+        "gulp-newer": "^1.1.0",
+        "gulp-nodemon": "^2.0.6",
+        "gulp-sourcemaps": "^1.6.0",
+        "gulp-util": "^3.0.7",
+        "husky": "^0.13.1",
+        "istanbul": "1.1.0-alpha.1",
+        "jest": "23.4.2"
+    },
+    "babel": {
+        "presets": [
+            "es2015",
+            "stage-2"
+        ],
+        "plugins": [
+            "add-module-exports",
+            "transform-object-rest-spread"
+        ],
+        "ignore": [
+            "build/yarn/**/*.js",
+            "build/nodejs/**/*.js"
+        ]
+    }
+}
