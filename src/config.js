@@ -63,7 +63,7 @@ const config = {
   },
   test: {
     db: {
-      name: envVars.TEST_DB_NAME,
+      database: envVars.TEST_DB_NAME,
     },
   },
   production: {

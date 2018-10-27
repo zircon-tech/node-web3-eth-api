@@ -10,8 +10,8 @@ const basePath = '/documents';
 /**
  * root level hooks
  */
-beforeAll(() => {
-  db.sequelize.sync();
+beforeAll(async () => {
+  await db.sequelize.sync({ force: true });
 });
 
 afterAll(() => {
@@ -19,25 +19,45 @@ afterAll(() => {
 });
 
 describe('## User APIs', () => {
-  describe(`# GET ${basePath}`, () => {
-    test('should get all documents', (done) => {
+  let document = {
+    id: 'AB123',
+    hash: 'HHSSHH',
+  };
+  describe(`# POST ${basePath}`, () => {
+    test('should create a new document', (done) => {
       request(app)
-        .get(`${basePath}`)
+        .post(`${basePath}`)
+        .send(document)
         .expect(httpStatus.OK)
         .then((res) => {
-          expect(Array.isArray(res.body));
+          expect(res.body.id).toEqual(document.id);
+          expect(res.body.hash).toEqual(document.hash);
+          document = res.body;
+          done();
+        })
+        .catch(done);
+    });
+  });
+
+  describe(`# GET ${basePath}/:documentId`, () => {
+    test('should get document details', (done) => {
+      request(app)
+        .get(`${basePath}/${document.id}`)
+        .expect(httpStatus.OK)
+        .then((res) => {
+          expect(res.body.id).toEqual(document.id);
+          expect(Array.isArray(res.body.versions));
           done();
         })
         .catch(done);
     });
 
-    test('should get all documents (with limit and skip)', (done) => {
+    test('should report error with message - Not found, when user does not exist', (done) => {
       request(app)
-        .get(`${basePath}`)
-        .query({ limit: 10, offset: 1 })
-        .expect(httpStatus.OK)
+        .get(`${basePath}/12345`)
+        .expect(httpStatus.NOT_FOUND)
         .then((res) => {
-          expect(Array.isArray(res.body));
+          expect(res.body.message).toEqual('Document not found');
           done();
         })
         .catch(done);
