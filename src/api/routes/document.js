@@ -1,8 +1,9 @@
 import express from 'express';
 import validate from 'express-validation';
-import { documentValidator as validator } from '../validators';
+import validators from '../validators';
 import controllers from '../controllers';
 
+const { documentValidator } = validators;
 const { documentCtrl } = controllers;
 
 const router = express.Router(); // eslint-disable-line
@@ -10,11 +11,11 @@ const router = express.Router(); // eslint-disable-line
 router
   .route('/')
 
-  /** GET /api/users - Get list of users */
-  .get(documentCtrl.list);
+  /** GET /api/documents - Get list of documents */
+  .get(documentCtrl.list)
 
-  /** POST /api/users - Create new user */
-  // .post(validate(validator.createDocument), documentCtrl.create);
+  /** POST /api/documents - Create new document */
+  .post(validate(documentValidator.createDocument), documentCtrl.create);
 
 // router
 //   .route('/:documentId')

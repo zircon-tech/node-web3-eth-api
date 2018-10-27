@@ -34,6 +34,9 @@ const envVarsSchema = Joi.object({
   DB_PASSWORD: Joi.string().allow('')
     .default('password')
     .description('Postgres password'),
+  TEST_DB_NAME: Joi.string()
+    .default('testapi')
+    .description('MySQL test database name'),
 })
 .unknown()
 .required();
@@ -60,7 +63,7 @@ const config = {
   },
   test: {
     db: {
-      name: envVars.DB_NAME,
+      name: envVars.TEST_DB_NAME,
     },
   },
   production: {

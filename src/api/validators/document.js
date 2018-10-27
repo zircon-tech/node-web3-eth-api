@@ -4,7 +4,8 @@ export default {
   // POST /documents
   createDocument: {
     body: {
-      username: Joi.string().required(),
+      id: Joi.string().required(),
+      hash: Joi.string().required(),
     },
   },
 };

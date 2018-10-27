@@ -6,23 +6,33 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         allowNull: false,
         primaryKey: true,
+        defaultValue: DataTypes.UUIDV4,
+      },
+      documentId: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        field: 'document_id',
       },
       hash: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
       },
+      status: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
+      tx: {
+        type: DataTypes.STRING,
+      },
       createdAt: {
         type: DataTypes.DATE,
-        allowNull: false,
         field: 'created_at',
-        defaultValue: sequelize.fn('NOW'),
       },
       updatedAt: {
         type: DataTypes.DATE,
-        allowNull: false,
         field: 'updated_at',
-        defaultValue: sequelize.fn('NOW'),
       },
       deletedAt: {
         type: DataTypes.DATE,
@@ -32,22 +42,28 @@ export default (sequelize, DataTypes) => {
     {
       freezeTableName: true,
       paranoid: true,
-    },
-    {
-      classMethods: {
-        associate: (models) => {
-          DocumentVersion.belongsTo(models.Document, {
-            foreignKey: {
-              allowNull: false,
-              name: 'documentId',
-              field: 'document_id',
-            },
-            as: 'document',
-          });
-        },
-      },
     }
   );
+
+  DocumentVersion.associate = (models) => {
+    DocumentVersion.belongsTo(models.Document, {
+      foreignKey: {
+        allowNull: false,
+        name: 'documentId',
+        field: 'document_id',
+      },
+      as: 'document',
+    });
+  };
+
+  DocumentVersion.prototype.toJSON = function() {
+    return {
+      hash: this.hash,
+      date: this.createdAt,
+      tx: this.tx || null,
+      status: this.status,
+    };
+  };
 
   return DocumentVersion;
 };

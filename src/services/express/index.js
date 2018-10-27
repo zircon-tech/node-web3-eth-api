@@ -11,7 +11,7 @@ import expressValidation from 'express-validation';
 import helmet from 'helmet';
 import winston from 'winston';
 import routes from '../../api/routes';
-import { env, apiRoot } from '../../config';
+import { env, apiRoot, apiKey } from '../../config';
 import APIError from '../../api/helpers/APIError';
 
 const winstonInstance = new winston.Logger({
@@ -55,6 +55,27 @@ if (env === 'development') {
       colorStatus: true, // Color the status code (default green, 3XX cyan, 4XX yellow, 5XX red).
     })
   );
+}
+
+app.use('/health', (_, res) => res.send('OK'));
+
+// Validate API Key and protect all routes
+if (env !== 'test') {
+  app.use((req, _, next) => {
+    const requestKey =
+      req.headers.api_key ||
+      req.headers.apiKey ||
+      req.headers['x-api-key'] ||
+      req.query.apiKey ||
+      req.query.api_key
+    ;
+    if (!requestKey) {
+      return next(new APIError('Missing Api Key', httpStatus.UNAUTHORIZED, true));
+    } else if (requestKey !== apiKey) {
+      return next(new APIError('Invalid Api Key', httpStatus.UNAUTHORIZED, true));
+    }
+    return next();
+  });
 }
 
 // Get API Version from .env (or else assume 1.0)

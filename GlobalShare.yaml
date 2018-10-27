@@ -1,0 +1,126 @@
+swagger: "2.0"
+info:
+  description: "Notarización en blockchain para GlobalShare"
+  version: "1.0.0"
+  title: "GlobalShare"
+  termsOfService: "http://zircon.tech"
+  contact:
+    email: "alejandro@zircon.tech"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "TBD"
+basePath: "/v1"
+tags:
+- name: "documents"
+  description: "Documents to be notarized in blockchain"
+schemes:
+- "https"
+- "http"
+paths:
+  /documents:
+    post:
+      tags:
+      - "documents"
+      summary: "Add a new hash document"
+      description: ""
+      operationId: "addDocument"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Document representation"
+        required: true
+        schema:
+          $ref: "#/definitions/Document"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/NotarizedItem"
+      security:
+      - api_key: []
+      
+  /documents/{documentId}:
+    get:
+      tags:
+      - "documents"
+      summary: "Get a document by ID, if the document doesn't exists it returns null"
+      description: "Get notarized document"
+      operationId: "getDocumentById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "documentId"
+        in: "path"
+        description: "ID of the document"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/NotarizedDocument"
+      security:
+      - api_key: []
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+    
+definitions:
+
+  Document:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      hash:
+        type: "string"
+        
+  NotarizedDocumentVersion:
+    type: "object"
+    properties:
+      hash:
+        type: "string"
+        description: "Document version hash"
+      date:
+        type: "string"
+        description: "document version notarization date"
+        
+  NotarizedDocument:
+    type: "object"
+    properties:
+      id: 
+        type: "integer"
+        description: "the id of the document, this is the id received as parameter in the POST method"
+      date:
+        type: "string"
+        description: "the date the entity was creted in the blockchain"
+      versions:
+        type: "array"
+        items:
+          $ref: "#/definitions/NotarizedDocumentVersion"
+      
+        
+  NotarizedItem:
+    type: "object"
+    properties:
+      id: 
+        type: "integer"
+        description: "the id of the document, this is the id received as parameter in the POST method"
+      hash:
+        type: "string"
+        description: "hash notarized"
+      status:
+        type: "integer"
+        description: "status of the transaction, this could be pending, created, mined, etc"
+      tx:
+        type: "string"
+        description: "blockchain transaction id"
+        
