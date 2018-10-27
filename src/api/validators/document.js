@@ -8,4 +8,9 @@ export default {
       hash: Joi.string().required(),
     },
   },
+  getDocument: {
+    params: {
+      documentId: Joi.string().required(),
+    },
+  },
 };

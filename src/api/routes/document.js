@@ -17,10 +17,10 @@ router
   /** POST /api/documents - Create new document */
   .post(validate(documentValidator.createDocument), documentCtrl.create);
 
-// router
-//   .route('/:documentId')
+router
+  .route('/:documentId')
 
-//   /** GET /api/users/:userId - Get user */
-//   .get(documentCtrl.get);
+  /** GET /api/documents/:documentId - Get document */
+  .get(validate(documentValidator.getDocument), documentCtrl.get);
 
 export default router;

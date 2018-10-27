@@ -43,6 +43,26 @@ const create = async(req, res, next) => {
   }
 };
 
+const get = async (req, res, next) => {
+  try {
+    const document = await Document.findById(req.params.documentId, {
+      include: {
+        model: DocumentVersion,
+        as: 'versions',
+      },
+      order: [
+        [{ model: DocumentVersion, as: 'versions' }, 'created_at', 'asc'],
+      ],
+    });
+    if (!document) {
+      return next(new APIError('Document not found', httpStatus.NOT_FOUND, true));
+    }
+
+    res.json(document);
+  } catch (err) {
+    next(err);
+  }
+};
 
 const list = async (req, res, next) => {
   try {
@@ -52,6 +72,9 @@ const list = async (req, res, next) => {
         model: DocumentVersion,
         as: 'versions',
       },
+      order: [
+        [{ model: DocumentVersion, as: 'versions' }, 'created_at', 'asc'],
+      ],
       limit: Number(limit),
       offset: Number(offset),
     });
@@ -61,4 +84,4 @@ const list = async (req, res, next) => {
   }
 };
 
-export default { create, list };
+export default { create, get, list };
