@@ -3,6 +3,7 @@ import gulpLoadPlugins from 'gulp-load-plugins';
 import path from 'path';
 import del from 'del';
 import runSequence from 'run-sequence';
+import pm2 from 'pm2';
 
 const plugins = gulpLoadPlugins();
 
@@ -24,11 +25,7 @@ gulp.task('copy-nonjs', () =>
     .pipe(gulp.dest('dist'))
 );
 
-gulp.task('copy-web3', () =>
-  gulp
-    .src(paths.web3)
-    .pipe(gulp.dest('dist/src/services/web3/'))
-);
+gulp.task('copy-web3', () => gulp.src(paths.web3).pipe(gulp.dest('dist/src/services/web3/')));
 
 gulp.task('copy', ['copy-nonjs', 'copy-web3']);
 
@@ -60,8 +57,30 @@ gulp.task('nodemon', ['copy', 'babel'], () =>
   })
 );
 
+gulp.task('pm2', ['copy', 'babel'], () => {
+  pm2.connect(
+    true,
+    () => {
+      pm2.start(
+        {
+          name: 'server',
+          script: path.join('dist', 'index.js'),
+        },
+        () => {
+          pm2.streamLogs('all', 0);
+        }
+      );
+    }
+  );
+});
+
 // gulp serve for development
-gulp.task('serve', ['clean'], () => runSequence('nodemon'));
+gulp.task('serve', ['clean'], () => {
+  if (process.env.NODE_ENV === 'production') {
+    return runSequence('pm2');
+  }
+  return runSequence('nodemon');
+});
 
 // default task: clean dist, compile js files and copy non-js files.
 gulp.task('default', ['clean'], () => {

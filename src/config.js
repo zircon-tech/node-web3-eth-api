@@ -86,11 +86,12 @@ const config = {
   },
   production: {
     db: {
-      name: envVars.DB_NAME,
+      database: envVars.DB_NAME,
       port: envVars.DB_PORT,
       host: envVars.DB_HOST,
-      user: envVars.DB_USER,
+      username: envVars.DB_USERNAME,
       password: envVars.DB_PASSWORD,
+      dialect: 'mysql',
     },
   },
 };
