@@ -37,6 +37,8 @@ const envVarsSchema = Joi.object({
   TEST_DB_NAME: Joi.string()
     .default('testapi')
     .description('MySQL test database name'),
+  CLIENT_CALLBACK_URL: Joi.string()
+    .description('Consumer callback for tx notifications'),
   ETH_HTTP_PROVIDER: Joi.string().required()
     .default('http://localhost:8045')
     .description('Ethereum provider access point'),
@@ -72,6 +74,7 @@ const config = {
       password: envVars.DB_PASSWORD,
       dialect: 'mysql',
     },
+    clientCallbackUrl: envVars.CLIENT_CALLBACK_URL,
     ethHttpProvider: envVars.ETH_HTTP_PROVIDER,
     ethSocketProvider: envVars.ETH_SOCKET_PROVIDER,
     ethPrivateKey: envVars.ETH_PRIVATE_KEY,

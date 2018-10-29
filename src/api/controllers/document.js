@@ -2,6 +2,7 @@ import httpStatus from 'http-status';
 import db from '../../services/sequelize';
 import APIError from '../helpers/APIError';
 import { notarize } from '../../services/web3';
+import logger from '../../services/express/logger';
 
 const { Document, DocumentVersion } = db;
 
@@ -28,6 +29,7 @@ const create = async(req, res, next) => {
       }, { transaction: t });
     }
 
+    logger.info('Notarizing document to blockchain');
     const txResult = await notarize(req.body.id, req.body.hash);
 
     version = await DocumentVersion.create({
