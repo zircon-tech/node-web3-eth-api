@@ -122,7 +122,7 @@ app.use((
 ) =>
   res.status(err.status).json({
     message: err.isPublic ? err.message : httpStatus[err.status],
-    stack: env === 'test' ? err.stack : {},
+    stack: env === 'development' ? err.stack : {},
   })
 );
 

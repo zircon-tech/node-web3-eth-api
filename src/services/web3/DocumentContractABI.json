@@ -1,0 +1,32 @@
+[
+  {
+    "constant": true,
+    "inputs": [{ "name": "id", "type": "string" }, { "name": "hash", "type": "string" }],
+    "name": "exists",
+    "outputs": [{ "name": "", "type": "bool", "value": false }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x2656554c"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{ "name": "", "type": "address", "value": "0x759C3D1931121240F9Ff108eccd2987d070c5Ec6" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x8da5cb5b"
+  },
+  {
+    "constant": false,
+    "inputs": [{ "name": "id", "type": "string" }, { "name": "hash", "type": "string" }],
+    "name": "notarize",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0xe2034caa"
+  }
+]

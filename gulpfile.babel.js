@@ -10,18 +10,27 @@ const paths = {
   js: ['./**/*.js', '!dist/**', '!node_modules/**', '!coverage/**'],
   nonJs: ['./package.json', './.gitignore', './.env'],
   tests: './server/tests/*.js',
+  web3: ['./src/services/web3/**/*.json'],
 };
 
 // Clean up dist and coverage directory
 gulp.task('clean', () => del.sync(['dist/**', 'dist/.*', 'coverage/**', '!dist', '!coverage']));
 
 // Copy non-js files to dist
-gulp.task('copy', () =>
+gulp.task('copy-nonjs', () =>
   gulp
     .src(paths.nonJs)
     .pipe(plugins.newer('dist'))
     .pipe(gulp.dest('dist'))
 );
+
+gulp.task('copy-web3', () =>
+  gulp
+    .src(paths.web3)
+    .pipe(gulp.dest('dist/src/services/web3/'))
+);
+
+gulp.task('copy', ['copy-nonjs', 'copy-web3']);
 
 // Compile ES6 to ES5 and copy to dist
 gulp.task('babel', () =>

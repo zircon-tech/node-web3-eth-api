@@ -37,6 +37,18 @@ const envVarsSchema = Joi.object({
   TEST_DB_NAME: Joi.string()
     .default('testapi')
     .description('MySQL test database name'),
+  ETH_HTTP_PROVIDER: Joi.string().required()
+    .default('http://localhost:8045')
+    .description('Ethereum provider access point'),
+  ETH_SOCKET_PROVIDER: Joi.string().required()
+    .default('http://localhost:8046')
+    .description('Ethereum web socket provider access point'),
+  ETH_PRIVATE_KEY: Joi.string().required()
+    .description('Account private key'),
+  ETH_DOCUMENT_CONTRACT_ADDRESS: Joi.string().required()
+    .description('Document contract address'),
+  ETH_DEFAULT_ACCOUNT_ADDRESS: Joi.string().required()
+    .description('Default account address to send data from'),
 })
 .unknown()
 .required();
@@ -60,6 +72,12 @@ const config = {
       password: envVars.DB_PASSWORD,
       dialect: 'mysql',
     },
+    ethHttpProvider: envVars.ETH_HTTP_PROVIDER,
+    ethSocketProvider: envVars.ETH_SOCKET_PROVIDER,
+    ethPrivateKey: envVars.ETH_PRIVATE_KEY,
+    ethDocumentContractAddress: envVars.ETH_DOCUMENT_CONTRACT_ADDRESS,
+    ethDefaultAccountAddress: envVars.ETH_DEFAULT_ACCOUNT_ADDRESS,
+    ethConfirmations: 10,
   },
   test: {
     db: {

@@ -1,6 +1,7 @@
 import httpStatus from 'http-status';
 import db from '../../services/sequelize';
 import APIError from '../helpers/APIError';
+import { notarize } from '../../services/web3';
 
 const { Document, DocumentVersion } = db;
 
@@ -26,9 +27,13 @@ const create = async(req, res, next) => {
         id: req.body.id,
       }, { transaction: t });
     }
+
+    const txResult = await notarize(req.body.id, req.body.hash);
+
     version = await DocumentVersion.create({
       documentId: document.id,
       hash: req.body.hash,
+      tx: txResult.transactionHash,
     }, { transaction: t });
 
     version = version.toJSON();
