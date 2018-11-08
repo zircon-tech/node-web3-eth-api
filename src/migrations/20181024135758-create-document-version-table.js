@@ -20,7 +20,7 @@ module.exports = {
       hash: {
         allowNull: false,
         type: Sequelize.STRING,
-        unique: true,
+        // unique: true,
       },
       status: {
         allowNull: false,

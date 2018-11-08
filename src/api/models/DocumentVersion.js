@@ -16,7 +16,7 @@ export default (sequelize, DataTypes) => {
       hash: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        // unique: true,
       },
       status: {
         allowNull: false,
