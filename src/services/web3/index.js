@@ -10,6 +10,7 @@ import {
 import DocumentContractABI from './DocumentContractABI.json';
 
 const defaultPK = Buffer.from(ethPrivateKey, 'hex');
+let globalNonce = 0;
 
 export const web3 = new Web3(new Web3.providers.HttpProvider(ethHttpProvider));
 export const web3Socket = new Web3(new Web3.providers.WebsocketProvider(ethSocketProvider));
@@ -27,7 +28,17 @@ export const notarize = async (id, hash) => {
   try {
     // const bytes32Hash = `0x${hash}`; // Change when appropriate
     const encoded = httpDocumentContract.methods.notarize(id, hash).encodeABI();
-    const txCount = await web3.eth.getTransactionCount(ethDefaultAccountAddress);
+    let txCount = await web3.eth.getTransactionCount(ethDefaultAccountAddress, 'pending');
+    if (globalNonce === 0) {
+      globalNonce = txCount;
+    } else if (txCount <= globalNonce) {
+      console.log('Concurrent TX');
+      globalNonce += 1;
+      txCount = globalNonce;
+    } else {
+      globalNonce = txCount;
+    }
+    console.log('TX count is: ', txCount);
     const gasPrice = await web3.eth.getGasPrice();
 
     const estimatedGas = await httpDocumentContract.methods.notarize(id, hash).estimateGas({
