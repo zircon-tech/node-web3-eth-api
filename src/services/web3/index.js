@@ -1,5 +1,6 @@
 import Web3 from 'web3';
 import Tx from 'ethereumjs-tx';
+import logger from '../express/logger';
 import {
   ethHttpProvider,
   ethSocketProvider,
@@ -32,13 +33,13 @@ export const notarize = async (id, hash) => {
     if (globalNonce === 0) {
       globalNonce = txCount;
     } else if (txCount <= globalNonce) {
-      console.log('Concurrent TX');
+      logger.info('Concurrent TX');
       globalNonce += 1;
       txCount = globalNonce;
     } else {
       globalNonce = txCount;
     }
-    console.log('TX count is: ', txCount);
+    logger.info(`TX count is: ${txCount}`);
     const gasPrice = await web3.eth.getGasPrice();
 
     const estimatedGas = await httpDocumentContract.methods.notarize(id, hash).estimateGas({
