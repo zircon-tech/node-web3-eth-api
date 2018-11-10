@@ -1,5 +1,6 @@
 import Web3 from 'web3';
 import Tx from 'ethereumjs-tx';
+import TxUtil from 'ethereumjs-util';
 import logger from '../express/logger';
 import {
   ethHttpProvider,
@@ -25,7 +26,7 @@ export const socketDocumentContract = new web3Socket.eth.Contract(
   ethDocumentContractAddress
 );
 
-export const notarize = async (id, hash) => {
+export const signNotarizeTx = async (id, hash) => {
   try {
     // const bytes32Hash = `0x${hash}`; // Change when appropriate
     const encoded = httpDocumentContract.methods.notarize(id, hash).encodeABI();
@@ -60,14 +61,24 @@ export const notarize = async (id, hash) => {
     const tx = new Tx(rawTx);
     tx.sign(defaultPK);
 
-    const serializedTx = tx.serialize();
-    const raw = `0x${serializedTx.toString('hex')}`;
+    const txHash = TxUtil.bufferToHex(tx.hash(true));
+    logger.info(`TX Hash: ${txHash}`);
 
-    const txHash = await web3.eth.sendSignedTransaction(raw);
-    return txHash;
+    return {
+      tx,
+      txHash,
+    };
   } catch (err) {
     throw err;
   }
+};
+
+export const sendNotarizeTx = async (tx) => {
+  logger.info('Sending signed TX');
+  const serializedTx = tx.serialize();
+  const raw = `0x${serializedTx.toString('hex')}`;
+  await web3.eth.sendSignedTransaction(raw);
+  logger.info('Signed TX sent');
 };
 
 export const getConfirmations = async (txHash) => {
