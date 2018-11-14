@@ -32,6 +32,10 @@ const create = async(req, res, next) => {
     logger.info('Notarizing document to blockchain');
     const txResult = await signNotarizeTx(req.body.id, req.body.hash);
 
+    if (!txResult || !txResult.tx || !txResult.txHash) {
+      return next(new APIError('Transaction could not be confirmed in the Blockchain. Please try submitting again', httpStatus.UNPROCESSABLE_ENTITY, true));
+    }
+
     version = await DocumentVersion.create({
       documentId: document.id,
       hash: req.body.hash,
