@@ -41,14 +41,14 @@ const create = async(req, res, next) => {
     version = version.toJSON();
     version.id = document.id;
 
-    t.commit();
+    await t.commit();
 
     res.json(version);
 
     // Sent async on purpose. Might take too long
     await sendNotarizeTx(txResult.tx);
   } catch (err) {
-    t.rollback();
+    await t.rollback();
     next(err);
   }
 };

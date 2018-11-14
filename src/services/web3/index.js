@@ -88,7 +88,7 @@ export const getConfirmations = async (txHash) => {
 
   // When transaction is unconfirmed, its block number is null.
   // In this case we return 0 as number of confirmations
-  const confirmations = trx.blockNumber === null ? 0 : currentBlock - trx.blockNumber;
+  const confirmations = !trx || trx.blockNumber === null ? 0 : currentBlock - trx.blockNumber;
 
   return confirmations;
 };
