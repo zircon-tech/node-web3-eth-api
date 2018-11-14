@@ -46,7 +46,7 @@ export const signNotarizeTx = async (id, hash) => {
     const estimatedGas = await httpDocumentContract.methods.notarize(id, hash).estimateGas({
       from: ethDefaultAccountAddress,
       to: ethDocumentContractAddress,
-      gas: gasPrice * 1.20,
+      gas: Math.ceil(gasPrice * 1.20),
     });
 
     const rawTx = {
