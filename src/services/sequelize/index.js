@@ -6,8 +6,7 @@ import { db as config } from '../../config';
 
 const sequelizeOptions = {
   dialect: config.dialect,
-  port: config.port,
-  host: config.host,
+  // dialectModulePath: 'sequelize-msnodesqlv8',
   operatorsAliases: false,
   pool: {
     max: 5,
@@ -16,9 +15,7 @@ const sequelizeOptions = {
   },
 };
 const sequelize = new Sequelize(
-  config.database,
-  config.username,
-  config.password,
+  config.dbConnectionString,
   sequelizeOptions
 );
 

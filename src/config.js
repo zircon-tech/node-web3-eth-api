@@ -14,42 +14,32 @@ const envVarsSchema = Joi.object({
   NODE_ENV: Joi.string()
     .allow(['development', 'production', 'test'])
     .default('development'),
-  PORT: Joi.number()
+  NODE_PORT: Joi.number()
     .default(5000),
-  API_ROOT: Joi.string()
+  NODE_API_ROOT: Joi.string()
     .default(''),
-  API_KEY: Joi.string()
+  NODE_API_KEY: Joi.string()
     .default('supersecret')
     .description('API KEY'),
-  DB_NAME: Joi.string()
-    .default('api')
-    .description('MySQL database name'),
-  DB_PORT: Joi.number()
-    .default(3306),
-  DB_HOST: Joi.string()
-    .default('localhost'),
-  DB_USERNAME: Joi.string().required()
-    .default('mysql')
-    .description('MySQL username'),
-  DB_PASSWORD: Joi.string().allow('')
-    .default('password')
-    .description('Postgres password'),
-  TEST_DB_NAME: Joi.string()
+  NODE_DB_CONNECTION_STRING: Joi.string()
+    .default('Server=myServerAddress;Port=3306;Database=myDataBase;Uid=myUsername;Pwd=myPassword;')
+    .description('Database connection string'),
+  NODE_TEST_DB_NAME: Joi.string()
     .default('testapi')
     .description('MySQL test database name'),
-  CLIENT_CALLBACK_URL: Joi.string()
+  NODE_CLIENT_CALLBACK_URL: Joi.string()
     .description('Consumer callback for tx notifications'),
-  ETH_HTTP_PROVIDER: Joi.string().required()
+  NODE_ETH_HTTP_PROVIDER: Joi.string().required()
     .default('http://localhost:8045')
     .description('Ethereum provider access point'),
-  ETH_SOCKET_PROVIDER: Joi.string().required()
+  NODE_ETH_SOCKET_PROVIDER: Joi.string().required()
     .default('http://localhost:8046')
     .description('Ethereum web socket provider access point'),
-  ETH_PRIVATE_KEY: Joi.string().required()
+  NODE_ETH_PRIVATE_KEY: Joi.string().required()
     .description('Account private key'),
-  ETH_DOCUMENT_CONTRACT_ADDRESS: Joi.string().required()
+  NODE_ETH_DOCUMENT_CONTRACT_ADDRESS: Joi.string().required()
     .description('Document contract address'),
-  ETH_DEFAULT_ACCOUNT_ADDRESS: Joi.string().required()
+  NODE_ETH_DEFAULT_ACCOUNT_ADDRESS: Joi.string().required()
     .description('Default account address to send data from'),
 })
 .unknown()
@@ -63,38 +53,30 @@ if (error) {
 const config = {
   all: {
     env: envVars.NODE_ENV || 'development',
-    port: envVars.PORT || 5000,
-    apiRoot: envVars.API_ROOT || '',
-    apiKey: envVars.API_KEY || 'supersecret',
+    port: envVars.NODE_PORT || 5000,
+    apiRoot: envVars.NODE_API_ROOT || '',
+    apiKey: envVars.NODE_API_KEY || 'supersecret',
     db: {
-      database: envVars.DB_NAME,
-      port: envVars.DB_PORT,
-      host: envVars.DB_HOST,
-      username: envVars.DB_USERNAME,
-      password: envVars.DB_PASSWORD,
+      dbConnectionString: envVars.NODE_DB_CONNECTION_STRING,
       dialect: 'mysql',
     },
-    clientCallbackUrl: envVars.CLIENT_CALLBACK_URL,
-    ethHttpProvider: envVars.ETH_HTTP_PROVIDER,
-    ethSocketProvider: envVars.ETH_SOCKET_PROVIDER,
-    ethPrivateKey: envVars.ETH_PRIVATE_KEY,
-    ethDocumentContractAddress: envVars.ETH_DOCUMENT_CONTRACT_ADDRESS,
-    ethDefaultAccountAddress: envVars.ETH_DEFAULT_ACCOUNT_ADDRESS,
+    clientCallbackUrl: envVars.NODE_CLIENT_CALLBACK_URL,
+    ethHttpProvider: envVars.NODE_ETH_HTTP_PROVIDER,
+    ethSocketProvider: envVars.NODE_ETH_SOCKET_PROVIDER,
+    ethPrivateKey: envVars.NODE_ETH_PRIVATE_KEY,
+    ethDocumentContractAddress: envVars.NODE_ETH_DOCUMENT_CONTRACT_ADDRESS,
+    ethDefaultAccountAddress: envVars.NODE_ETH_DEFAULT_ACCOUNT_ADDRESS,
     ethConfirmations: 10,
   },
   test: {
     db: {
-      database: envVars.TEST_DB_NAME,
+      database: envVars.NODE_TEST_DB_NAME,
     },
   },
   production: {
     db: {
-      database: envVars.DB_NAME,
-      port: envVars.DB_PORT,
-      host: envVars.DB_HOST,
-      username: envVars.DB_USERNAME,
-      password: envVars.DB_PASSWORD,
-      dialect: 'mysql',
+      dbConnectionString: envVars.NODE_DB_CONNECTION_STRING,
+      dialect: 'mssql',
     },
   },
 };
