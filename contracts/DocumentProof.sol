@@ -1,20 +1,16 @@
 pragma solidity ^0.4.24;
 
-contract DocumentTrackContract {
+contract DocumentProof {
     struct Document {
         DocumentVersion[] versions;
     }
 
     struct DocumentVersion {
-        string hash; // Change to bytes32 when apropriate
-        // bytes32 hash;
-        // uint32 date;
-        // string data;
+        string hash;
     }
     address public owner = msg.sender;
 
     // stored documents and versions
-    // mapping (string => mapping (bytes32 => bool)) private proofs;
     mapping (string => mapping (string => bool)) private proofs;
     mapping (string => Document) private documents;
 
