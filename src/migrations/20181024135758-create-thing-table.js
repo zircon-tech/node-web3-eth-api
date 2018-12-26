@@ -2,10 +2,23 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Document', {
+    return queryInterface.createTable('Thing', {
       id: {
         primaryKey: true,
         allowNull: false,
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+      },
+      hash: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      status: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+      },
+      tx: {
         type: Sequelize.STRING,
       },
       created_at: {
@@ -32,7 +45,7 @@ module.exports = {
   },
 
   down: (queryInterface) => {
-    return queryInterface.dropTable('Document');
+    return queryInterface.dropTable('Thing');
 
     /*
       Add reverting commands here.

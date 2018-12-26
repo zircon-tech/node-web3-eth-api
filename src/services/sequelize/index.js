@@ -6,7 +6,6 @@ import { db as config } from '../../config';
 
 const sequelizeOptions = {
   dialect: config.dialect,
-  // dialectModulePath: 'sequelize-msnodesqlv8',
   operatorsAliases: false,
   pool: {
     max: 5,

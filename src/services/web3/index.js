@@ -5,11 +5,11 @@ import logger from '../express/logger';
 import {
   ethHttpProvider,
   ethSocketProvider,
-  ethDocumentContractAddress,
+  ethThingContractAddress,
   ethPrivateKey,
   ethDefaultAccountAddress,
 } from '../../config';
-import DocumentContractABI from './DocumentContractABI.json';
+import ThingContractABI from './ThingContractABI.json';
 
 const defaultPK = Buffer.from(ethPrivateKey, 'hex');
 let globalNonce = 0;
@@ -17,19 +17,19 @@ let globalNonce = 0;
 export const web3 = new Web3(new Web3.providers.HttpProvider(ethHttpProvider));
 export const web3Socket = new Web3(new Web3.providers.WebsocketProvider(ethSocketProvider));
 
-export const httpDocumentContract = new web3.eth.Contract(
-  DocumentContractABI,
-  ethDocumentContractAddress
+export const httpThingContract = new web3.eth.Contract(
+  ThingContractABI,
+  ethThingContractAddress
 );
-export const socketDocumentContract = new web3Socket.eth.Contract(
-  DocumentContractABI,
-  ethDocumentContractAddress
+export const socketThingContract = new web3Socket.eth.Contract(
+  ThingContractABI,
+  ethThingContractAddress
 );
 
 export const signNotarizeTx = async (id, hash) => {
   try {
-    // const bytes32Hash = `0x${hash}`; // Change when appropriate
-    const encoded = httpDocumentContract.methods.notarize(id, hash).encodeABI();
+    const bytes32Hash = `0x${hash}`;
+    const encoded = httpThingContract.methods.notarize(id, bytes32Hash).encodeABI();
     let txCount = await web3.eth.getTransactionCount(ethDefaultAccountAddress, 'pending');
     if (globalNonce === 0) {
       globalNonce = txCount;
@@ -43,15 +43,15 @@ export const signNotarizeTx = async (id, hash) => {
     logger.info(`TX count is: ${txCount}`);
     const gasPrice = await web3.eth.getGasPrice();
 
-    const estimatedGas = await httpDocumentContract.methods.notarize(id, hash).estimateGas({
+    const estimatedGas = await httpThingContract.methods.notarize(id, bytes32Hash).estimateGas({
       from: ethDefaultAccountAddress,
-      to: ethDocumentContractAddress,
+      to: ethThingContractAddress,
       gas: Math.ceil(gasPrice * 1.20),
     });
 
     const rawTx = {
       from: ethDefaultAccountAddress,
-      to: ethDocumentContractAddress,
+      to: ethThingContractAddress,
       data: encoded,
       gasLimit: estimatedGas * 1.20,
       gasPrice: gasPrice * 1.20,

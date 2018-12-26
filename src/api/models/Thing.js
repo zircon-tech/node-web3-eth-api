@@ -1,11 +1,24 @@
 export default (sequelize, DataTypes) => {
-  const Document = sequelize.define(
-    'Document',
+  const Thing = sequelize.define(
+    'Thing',
     {
       id: {
-        type: DataTypes.STRING,
+        type: DataTypes.UUID,
         allowNull: false,
         primaryKey: true,
+        defaultValue: DataTypes.UUIDV4,
+      },
+      hash: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      status: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
+      tx: {
+        type: DataTypes.STRING,
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -26,23 +39,14 @@ export default (sequelize, DataTypes) => {
     }
   );
 
-  Document.associate = (models) => {
-    Document.hasMany(models.DocumentVersion, {
-      foreignKey: {
-        allowNull: true,
-        field: 'document_id',
-      },
-      as: 'versions',
-    });
-  };
-
-  Document.prototype.toJSON = function() {
+  Thing.prototype.toJSON = function() {
     return {
-      id: this.id,
+      hash: this.hash,
       date: this.createdAt,
-      versions: this.versions || [],
+      tx: this.tx || null,
+      status: this.status,
     };
   };
 
-  return Document;
+  return Thing;
 };

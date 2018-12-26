@@ -1,5 +1,5 @@
-import documentValidator from './document';
+import thingValidator from './thing';
 
 export default {
-  documentValidator,
+  thingValidator,
 };

@@ -5,7 +5,7 @@ import httpStatus from 'http-status';
 import db from '../services/sequelize';
 import app from '../../index';
 
-const basePath = '/documents';
+const basePath = '/things';
 
 /**
  * root level hooks
@@ -19,34 +19,31 @@ afterAll(() => {
 });
 
 describe('## User APIs', () => {
-  let document = {
-    id: 'AB123',
-    hash: 'HHSSHH',
+  let thing = {
+    id: '0x759C3D1931121240F9Ff108eccd2987d070c5Ec6',
   };
   describe(`# POST ${basePath}`, () => {
-    test('should create a new document', (done) => {
+    test('should create a new thing', (done) => {
       request(app)
         .post(`${basePath}`)
-        .send(document)
+        .send(thing)
         .expect(httpStatus.OK)
         .then((res) => {
-          expect(res.body.id).toEqual(document.id);
-          expect(res.body.hash).toEqual(document.hash);
-          document = res.body;
+          expect(res.body.id).toEqual(thing.id);
+          thing = res.body;
           done();
         })
         .catch(done);
     });
   });
 
-  describe(`# GET ${basePath}/:documentId`, () => {
-    test('should get document details', (done) => {
+  describe(`# GET ${basePath}/:id`, () => {
+    test('should get thing details', (done) => {
       request(app)
-        .get(`${basePath}/${document.id}`)
+        .get(`${basePath}/${thing.id}`)
         .expect(httpStatus.OK)
         .then((res) => {
-          expect(res.body.id).toEqual(document.id);
-          expect(Array.isArray(res.body.versions));
+          expect(res.body.id).toEqual(thing.id);
           done();
         })
         .catch(done);
@@ -57,7 +54,7 @@ describe('## User APIs', () => {
         .get(`${basePath}/12345`)
         .expect(httpStatus.NOT_FOUND)
         .then((res) => {
-          expect(res.body.message).toEqual('Document not found');
+          expect(res.body.message).toEqual('Thing not found');
           done();
         })
         .catch(done);

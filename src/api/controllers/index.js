@@ -1,5 +1,5 @@
-import documentCtrl from './document';
+import thingCtrl from './thing';
 
 export default {
-  documentCtrl,
+  thingCtrl,
 };

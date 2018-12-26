@@ -1,16 +1,16 @@
 import Joi from 'joi';
 
 export default {
-  // POST /documents
-  createDocument: {
+  // POST /things
+  createThing: {
     body: {
       id: Joi.string().required(),
       hash: Joi.string().required(),
     },
   },
-  getDocument: {
+  getThing: {
     params: {
-      documentId: Joi.string().required(),
+      id: Joi.string().required(),
     },
   },
 };

@@ -22,7 +22,7 @@ const envVarsSchema = Joi.object({
     .default('supersecret')
     .description('API KEY'),
   NODE_DB_CONNECTION_STRING: Joi.string()
-    .default('Server=myServerAddress;Port=3306;Database=myDataBase;Uid=myUsername;Pwd=myPassword;')
+    .default('mysql://user:password@host:port/dbname')
     .description('Database connection string'),
   NODE_TEST_DB_NAME: Joi.string()
     .default('testapi')
@@ -37,8 +37,8 @@ const envVarsSchema = Joi.object({
     .description('Ethereum web socket provider access point'),
   NODE_ETH_PRIVATE_KEY: Joi.string().required()
     .description('Account private key'),
-  NODE_ETH_DOCUMENT_CONTRACT_ADDRESS: Joi.string().required()
-    .description('Document contract address'),
+  NODE_ETH_THING_CONTRACT_ADDRESS: Joi.string().required()
+    .description('Thing contract address'),
   NODE_ETH_DEFAULT_ACCOUNT_ADDRESS: Joi.string().required()
     .description('Default account address to send data from'),
 })
@@ -64,7 +64,7 @@ const config = {
     ethHttpProvider: envVars.NODE_ETH_HTTP_PROVIDER,
     ethSocketProvider: envVars.NODE_ETH_SOCKET_PROVIDER,
     ethPrivateKey: envVars.NODE_ETH_PRIVATE_KEY,
-    ethDocumentContractAddress: envVars.NODE_ETH_DOCUMENT_CONTRACT_ADDRESS,
+    ethThingContractAddress: envVars.NODE_ETH_THING_CONTRACT_ADDRESS,
     ethDefaultAccountAddress: envVars.NODE_ETH_DEFAULT_ACCOUNT_ADDRESS,
     ethConfirmations: 10,
   },

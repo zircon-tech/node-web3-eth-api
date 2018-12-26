@@ -7,14 +7,14 @@ import { ethConfirmations, clientCallbackUrl } from '../config';
 
 const { lt } = sequelize.Op;
 
-const { DocumentVersion } = db;
+const { Thing } = db;
 
-const getPendingDocuments = async () => {
-  const documents = await DocumentVersion.findAll({
+const getPendingThings = async () => {
+  const things = await Thing.findAll({
     attributes: ['id', 'tx', 'hash', 'status'],
     where: { status: { [lt]: 2 } },
   });
-  return documents.map(d => ({
+  return things.map(d => ({
     id: d.id,
     tx: d.tx,
     hash: d.hash,
@@ -22,14 +22,14 @@ const getPendingDocuments = async () => {
   }));
 };
 
-const setDocumentStatus = async (id, status = 0) => {
-  await DocumentVersion.update({ status }, { where: { id } });
+const setThingStatus = async (id, status = 0) => {
+  await Thing.update({ status }, { where: { id } });
 };
 
-const confirmTransaction = async (document) => {
-  if (document && clientCallbackUrl) {
-    return request.post(clientCallbackUrl, { json: { ...document } }, (error) => {
-      if (error) logger.error(`Error calling client callback for document: ${document.id} -- ERR: ${error}`);
+const confirmTransaction = async (thing) => {
+  if (thing && clientCallbackUrl) {
+    return request.post(clientCallbackUrl, { json: { ...thing } }, (error) => {
+      if (error) logger.error(`Error calling client callback for thing: ${thing.id} -- ERR: ${error}`);
     });
   }
   return Promise.resolve();
@@ -39,20 +39,20 @@ const watchContractTransactions = async () => {
   setTimeout(async () => {
     try {
       logger.info('Watching pending transactions');
-      const pendingDocuments = await getPendingDocuments();
+      const pendingThings = await getPendingThings();
 
       await Promise.all(
-        pendingDocuments.map(async (doc) => {
-          if (doc.tx) {
-            const confirmations = await getConfirmations(doc.tx);
+        pendingThings.map(async (thing) => {
+          if (thing.tx) {
+            const confirmations = await getConfirmations(thing.tx);
 
             if (confirmations >= ethConfirmations) {
-              logger.info(`Status change to 2 for id: ${doc.id}`);
-              await setDocumentStatus(doc.id, 2);
-              await confirmTransaction(doc);
-            } else if (doc.status === 0 && confirmations > 0) {
-              logger.info(`Status change to 1 for id: ${doc.id}`);
-              await setDocumentStatus(doc.id, 1);
+              logger.info(`Status change to 2 for id: ${thing.id}`);
+              await setThingStatus(thing.id, 2);
+              await confirmTransaction(thing);
+            } else if (thing.status === 0 && confirmations > 0) {
+              logger.info(`Status change to 1 for id: ${thing.id}`);
+              await setThingStatus(thing.id, 1);
             }
           }
         })

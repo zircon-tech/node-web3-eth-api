@@ -1,8 +1,8 @@
 import express from 'express';
-import documentRoutes from './document';
+import thingRoutes from './thing';
 
 const router = express.Router(); // eslint-disable-line
 
-router.use('/documents', documentRoutes);
+router.use('/things', thingRoutes);
 
 export default router;
