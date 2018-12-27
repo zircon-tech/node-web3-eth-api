@@ -21,6 +21,8 @@ This source code works as a boilerplate (or simply as an example) to build an No
 - Install Node v10+
 - Install mysql
 - Install project dependencies with `npm install`
+- Run migrations with `npm run db:migrate`
+- Start server with `npm start`
 
 ### Windows 2016 x86
 
@@ -33,7 +35,16 @@ This source code works as a boilerplate (or simply as an example) to build an No
 - Install Windows Build Tools with `npm install --global --production windows-build-tools`
 - Install project dependencies with `npm install`
 - Make sure the followiing files exist in the root folder (sometimes they are not copied in windows due to its extension): .babelrc, .eslintrc.js, .sequelizerc
+- Run migrations with `npm run db:migrate`
+- Start server with `npm start`
 
+## Blockchain
+
+You'll find a simple contract called ThingProof which stores in the blockchain a proof of existence for .. a thing. You can extend it to a more specific behaviour as well as extend the object properties. This contract is used to interact with web3 interface and allow frontend users to save their data. It is expected that API consumers send the id and hash of the objects you want to store. You can easily change the controller method so that information is calculated within the API.
+
+In order to get things working, you'll need to deploy your contract and set the contract address and the wallet address in the environment variables.
+
+You can use [remix](https://remix.ethereum.org/) or [mycrypto](https://mycrypto.com/) app to deploy the contract. Bytecode and ABI json are provided in web3 folder.
 
 ## Environment variables
 

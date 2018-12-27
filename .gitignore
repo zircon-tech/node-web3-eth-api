@@ -54,3 +54,5 @@ node_modules
 .gradle
 build/nodejs
 build/yarn
+
+package-lock.json

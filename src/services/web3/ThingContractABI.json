@@ -1,29 +1,6 @@
 [
 	{
 		"constant": true,
-		"inputs": [
-			{
-				"name": "id",
-				"type": "string"
-			},
-			{
-				"name": "hash",
-				"type": "string"
-			}
-		],
-		"name": "exists",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
 		"inputs": [],
 		"name": "owner",
 		"outputs": [
@@ -41,11 +18,7 @@
 		"inputs": [
 			{
 				"name": "id",
-				"type": "string"
-			},
-			{
-				"name": "hash",
-				"type": "string"
+				"type": "bytes32"
 			}
 		],
 		"name": "notarize",
@@ -53,5 +26,17 @@
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "id",
+				"type": "bytes32"
+			}
+		],
+		"name": "_newThing",
+		"type": "event"
 	}
 ]

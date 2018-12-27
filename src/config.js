@@ -76,7 +76,7 @@ const config = {
   production: {
     db: {
       dbConnectionString: envVars.NODE_DB_CONNECTION_STRING,
-      dialect: 'mssql',
+      dialect: 'mysql',
     },
   },
 };
